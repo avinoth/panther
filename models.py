@@ -13,6 +13,7 @@ class User(db.Model):
     email = db.Column(db.String(120), index = True, unique = True)
     password = db.Column(db.String(60), index = True)
     posts = db.relationship('Post', backref = 'author', lazy = 'dynamic')
+    comments = db.relationship('Comment', backref = 'commenter', lazy='dynamic')
 
     def is_authenticated(self):
         return True
@@ -42,11 +43,26 @@ class Post(db.Model):
     body = db.Column(db.String(1400))
     timestamp = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    comments = db.relationship('Comment', backref = 'parentpost', lazy='dynamic')
 
     def __repr__(self):
         return '<Post %r>' % (self.title)
         
-        def __init__(self , title ,body, timestamp, user_id):
-            self.title = title
-            self.body = body
-
+#     def __init__(self , title ,body, timestamp):
+#         self.title = title
+#         self.body = body
+#         self.timestamp = timestamp
+        
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    content = db.Column(db.String(140))
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    
+    def __init__(self , content):
+        self.content = content
+        
+    def __repr__(self):
+        return '<Post %r>' % (self.content)
+    
+# db.create_all()

@@ -1,10 +1,9 @@
 from flask import render_template, flash, redirect, session, url_for, request, g, Flask, abort
 from flask.ext.sqlalchemy import SQLAlchemy
 from models import User, Post
-from forms import LoginForm
+from forms import PostForm
 import os
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
-from flask.ext.openid import OpenID
 from config import basedir
 import datetime
 
@@ -26,7 +25,6 @@ def load_user(id):
 @app.route('/')
 @app.route('/index')
 def index():
-    
     return render_template("index.html")
 
 
@@ -77,16 +75,21 @@ def before_request():
 @app.route('/new', methods=['GET', 'POST'])
 @login_required
 def new():
+    form = PostForm()
     if request.method == 'POST':
         if not request.form['title']:
             flash('Enter a title', 'error')
         elif not request.form['body']:
             flash('Content cannot be empty', 'error')
         else:
-            post = Post(title=request.form['title'], body=request.form['body'], timestamp=datetime.datetime.utcnow(), author=g.user)
+            post = Post(title=form.title.data, body=form.body.data, timestamp=datetime.datetime.utcnow(),
+                        author = g.user)
             db.session.add(post)
             db.session.commit()
-            flash(g.user)
             return redirect(url_for('index'))
-    return render_template('newpost.html')
+    return render_template('newpost.html',
+                           form = form)
+
+if __name__ == '__main__':
+    app.run()
 
