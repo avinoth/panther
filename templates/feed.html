@@ -1,0 +1,22 @@
+{% extends "base_template.html" %}
+{% block content %}
+
+<!-- Blog feed begins here -->
+
+<div class="container">
+<div class="col-md-6">
+	{% for post in posts %}
+    <h1>{{ post.title }}</h1>
+    <p>{{post.body}}</p>
+    <div>
+<span class="badge">{{ post.author.name }}</span>
+     </div>
+    <hr>
+    {% endfor %}
+
+</div>
+</div>
+
+<!-- Blog feed ends here -->
+
+{% endblock %}

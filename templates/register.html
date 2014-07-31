@@ -1,0 +1,14 @@
+{% extends "base_template.html" %}
+{% block content %}
+
+<div class="span3 well">
+      <legend>Signup for Panther</legend>
+    <form accept-charset="UTF-8" action="" method="post">
+		<input class="span3" id="name" name="name" placeholder="Full Name" type="text" value="{{ request.form.name }}" required> 
+		<input type="email" id="email" name="email" class="span3" placeholder="Enter Email" value="{{ request.form.email }}" required>
+        <input type="password" id="password" name="password" class="span3" placeholder="Enter Password" value="{{ request.form.password }}" required>
+        <button class="btn btn-default" type="submit">Sign up</button>
+    </form>
+</div>
+
+{% endblock %}
