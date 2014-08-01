@@ -21,6 +21,9 @@ lm.login_view = 'login'
 def load_user(id):
     return User.query.get(int(id))
 
+@app.before_request
+def before_request():
+    g.user = current_user
 
 @app.route('/')
 @app.route('/index')
@@ -54,23 +57,20 @@ def login():
         return redirect(url_for('login'))
     login_user(registered_user)
     flash('Logged in successfully')
-    return redirect(request.args.get('next') or url_for('feed'))
+    return redirect(request.args.get('next') or url_for('manage'))
 
-@app.route('/feed')
+@app.route('/manage')
 @login_required
-def feed():
+def manage():
     return render_template("feed.html",
     posts = Post.query.filter_by(user_id = g.user.id).order_by(Post.timestamp.desc()).all())
 
+@app.route('/feed/<name>')
+def feed(name):
+    user = User.query.filter_by(name = name).first()
+    return render_template("feed.html",
+    posts = Post.query.filter_by(user_id = user.id).order_by(Post.timestamp.desc()).all())
 
-@app.route('/logout')
-def logout():
-    logout_user()
-    return redirect(url_for('index')) 
-
-@app.before_request
-def before_request():
-    g.user = current_user
 
 @app.route('/new', methods=['GET', 'POST'])
 @login_required
@@ -82,13 +82,19 @@ def new():
         elif not request.form['body']:
             flash('Content cannot be empty', 'error')
         else:
-            post = Post(title=form.title.data, body=form.body.data, timestamp=datetime.datetime.utcnow(),
+            post = Post(title=request.form['title'], body=request.form['body'], timestamp=datetime.datetime.now().date(),
                         author = g.user)
             db.session.add(post)
             db.session.commit()
-            return redirect(url_for('feed'))
+            return redirect(url_for('manage'))
     return render_template('newpost.html',
                            form = form)
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
 
 if __name__ == '__main__':
     app.run()
