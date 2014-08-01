@@ -1,7 +1,6 @@
 from flask import render_template, flash, redirect, session, url_for, request, g, Flask, abort
 from flask.ext.sqlalchemy import SQLAlchemy
 from models import User, Post, db, Comment
-from forms import PostForm
 import os
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
 from config import basedir
@@ -99,7 +98,6 @@ def delete(id):
 @app.route('/new', methods=['GET', 'POST'])
 @login_required
 def new():
-    form = PostForm()
     if request.method == 'POST':
         if not request.form['title']:
             flash('Enter a title', 'error')
