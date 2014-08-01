@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, session, url_for, request, g, Flask, abort
 from flask.ext.sqlalchemy import SQLAlchemy
-from models import User, Post
+from models import User, Post, db
 from forms import PostForm
 import os
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
@@ -10,7 +10,7 @@ import datetime
 #app configuration settings
 app = Flask(__name__)
 app.config.from_object('config')
-db = SQLAlchemy(app)
+
 
 #Flask-Login configuration settings
 lm = LoginManager()
@@ -86,7 +86,7 @@ def new():
                         author = g.user)
             db.session.add(post)
             db.session.commit()
-            return redirect(url_for('index'))
+            return redirect(url_for('feed'))
     return render_template('newpost.html',
                            form = form)
 
