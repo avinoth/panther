@@ -4,3 +4,4 @@ env
 config.py
 database.db
 devfile.html
+*.pyc
