@@ -118,7 +118,7 @@ footer {
 				{% for comment in comments %}
 				
                 <!-- the comments -->
-                <h3><i class="fa fa-comment"></i> {{ comment.commenter }} says:
+                <h3><i class="fa fa-comment"></i> {{ comment.commenter.name }} says:
                 </h3>
                 <p> {{ comment.content }}</p>
                 

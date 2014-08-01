@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, session, url_for, request, g, Flask, abort
 from flask.ext.sqlalchemy import SQLAlchemy
-from models import User, Post, db
+from models import User, Post, db, Comment
 from forms import PostForm
 import os
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
@@ -62,7 +62,7 @@ def login():
 @app.route('/manage')
 @login_required
 def manage():
-    return render_template("feed.html",
+    return render_template("manage.html",
     posts = Post.query.filter_by(user_id = g.user.id).order_by(Post.timestamp.desc()).all())
 
 @app.route('/feed/<name>')
@@ -70,6 +70,30 @@ def feed(name):
     user = User.query.filter_by(name = name).first()
     return render_template("feed.html",
     posts = Post.query.filter_by(user_id = user.id).order_by(Post.timestamp.desc()).all())
+
+@app.route('/feed/<int:pid>', methods=['GET', 'POST'])
+@login_required
+def blogpost(pid):
+    post = Post.query.filter_by(id = pid).first()
+    if request.method == 'POST':
+        comment = Comment(content=request.form['comment'], parentpost=post, commenter = g.user)
+        db.session.add(comment)
+        db.session.commit()
+    return render_template("blogpost.html",
+                           post = post,
+                           comments = Comment.query.filter_by(post_id = post.id).all())
+
+@app.route('/delete/<int:id>')
+@login_required
+def delete(id):
+    post = Post.query.filter_by(id = id).first()
+    if post.author.id == g.user.id:
+        db.session.delete(post)
+        db.session.commit()
+        flash("Your post has been deleted")
+        return redirect(url_for('manage'))
+    flash("You are not authorised to delete this post")
+    return redirect(url_for('manage'))
 
 
 @app.route('/new', methods=['GET', 'POST'])
@@ -89,6 +113,29 @@ def new():
             return redirect(url_for('manage'))
     return render_template('newpost.html',
                            form = form)
+
+
+@app.route('/edit/<int:pid>', methods = ['GET', 'POST'])
+@login_required
+def edit(pid):
+    post = Post.query.filter_by(id = pid).first()
+    if request.method == 'POST':
+        if post.author.id == g.user.id:
+            post.title = request.form['title']
+            post.body = request.form['body']
+            post.timestamp = datetime.datetime.now().date()
+            db.session.add(post)
+            db.session.commit()
+            flash("Post has been successfully updated")
+            return redirect(url_for('manage'))
+        else:
+            flash("You are not authorized to edit this post")
+            return redirect(url_for('manage'))
+        
+    return render_template("edit.html",
+                           post = post)
+    
+
 
 @app.route('/logout')
 def logout():

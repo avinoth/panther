@@ -42,10 +42,12 @@
   <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav navbar-right">
-      <li><a href="#" class="scroll-link" data-id="home">Home</a></li>
+      
 
       {% if g.user.is_authenticated()%}
+      <li><a href="{{ url_for ('index')}}" class="scroll-link" data-id="home">Home</a></li>
       <li><a href="{{ url_for('new') }}">New Post</a></li>
+      <li><a href="{{ url_for('manage') }}">Manage</a></li>
       <li><a href="{{ url_for('logout') }}">Logout</a></li>
       {% endif %}
 
