@@ -55,14 +55,13 @@ class Post(db.Model):
         
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    commenter_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     content = db.Column(db.String(140))
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
     
-    def __init__(self , content):
-        self.content = content
+#     def __init__(self , content):
+#         self.content = content
         
     def __repr__(self):
         return '<Post %r>' % (self.content)
     
-# db.create_all()
