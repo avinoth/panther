@@ -1,0 +1,18 @@
+{% extends "base_template.html" %}
+{% block content %}
+
+<div class="container">
+<div class="col-md-12">
+	{% for post in posts %}
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.body}}</p>
+    <div>
+<span class="badge">Posted {{ post.timestamp }}</span><div class="pull-right"><span class="label label-warning"><a href="#">Delete Post</a></span></div>         
+     </div>
+    <hr>
+{% endfor %}
+
+</div>
+</div>
+
+{% endblock %}
