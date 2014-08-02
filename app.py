@@ -109,8 +109,7 @@ def new():
             db.session.add(post)
             db.session.commit()
             return redirect(url_for('manage'))
-    return render_template('newpost.html',
-                           form = form)
+    return render_template('newpost.html')
 
 
 @app.route('/edit/<int:pid>', methods = ['GET', 'POST'])
