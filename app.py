@@ -34,8 +34,7 @@ def index():
 
 def register():
     if request.method == 'GET':
-        return render_template('register.html',
-                                user = "Vinoth")
+        return render_template('register.html')
     user = User(name=request.form['name'] , email=request.form['email'], password=request.form['password'])
     db.session.add(user)
     db.session.commit()
