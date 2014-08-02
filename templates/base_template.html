@@ -45,7 +45,8 @@
       
 
       {% if g.user.is_authenticated()%}
-      <li><a href="{{ url_for ('index')}}" class="scroll-link" data-id="home">Home</a></li>
+      <li><a href="{{ url_for ('index') }}" class="scroll-link">Hi, {{ g.user.name }}</a></li>
+      <li><a href="{{ url_for ('index') }}" class="scroll-link">Home</a></li>
       <li><a href="{{ url_for('new') }}">New Post</a></li>
       <li><a href="{{ url_for('manage') }}">Manage</a></li>
       <li><a href="{{ url_for('logout') }}">Logout</a></li>
