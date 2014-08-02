@@ -5,11 +5,10 @@
 <div class="col-md-12">
 	{% for post in posts %}
     <h1><a href="/feed/{{post.id}}">{{ post.title }}</a></h1>
-    <p>{{ post.body}}</p>
     <div>
-<span class="badge">Posted {{ post.timestamp }}</span><div class="pull-right"><span class="label label-warning"><a href="/delete/{{ post.id }}">Delete Post</a></span>
+    	<span class="label label-warning"><a href="/delete/{{ post.id }}">Delete Post</a></span>
 	<span class="label label-default"><a href="/edit/{{ post.id }}">Edit Post</a></span>
-</div>         
+<span class="badge">Posted {{ post.timestamp }}</span><div class="pull-right">
      </div>
     <hr>
 {% endfor %}

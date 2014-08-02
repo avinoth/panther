@@ -92,7 +92,7 @@ footer {
 
                 <!-- the actual blog post: title/author/date/content -->
                 <h1><a href="">{{ post.title }}</a></h1>
-                <p class="lead"><i class="fa fa-user"></i> by <a href="">{{ post.author.name }}</a>
+                <p class="lead"><i class="fa fa-user"></i> by <a href="/feed/{{ post.author.name }}">{{ post.author.name }}</a>
                 </p>
                 <hr>
                 <p><i class="fa fa-calendar"></i> Posted on {{ post.timestamp }}</p>
